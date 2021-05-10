@@ -20,7 +20,9 @@
     <!-- Robot initial pose -->
     <arg name="x" default="0.0" />
     <arg name="y" default="0.0" />
-    <arg name="yaw" default="$(eval -pi/2)" />
+    <!-- <arg name="yaw" default="$(eval -pi/2)" /> -->
+    <arg name="yaw" default="0.0" />
+    
 
     <arg name="robot_name" value="kobuki" />
 

@@ -8,7 +8,7 @@ from tf_conversions import transformations as tf
 from geometry_msgs.msg import TransformStamped
 
 class control:
-	def __init__(self, path=[[4, 3]], tolerance=0.01):
+	def __init__(self, path=[[-5.0, -5.0]], tolerance=0.01):
 		# Variable initialization
 		self.path = np.array(path)
 		#self.x_G, self.y_G = [np.array(self.path[:,0]), np.array(self.path[:,1])]
@@ -23,14 +23,14 @@ class control:
 		self.pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=10)
 
 		# Frecuency
-		f = 120 # Hz
+		f = 120.0 # Hz
 		rate = rospy.Rate(f)
 		# Errors
-		last_rho = 0
-		cum_rho = 0
+		last_rho = 0.0
+		cum_rho = 0.0
 		
-		last_theta = 0
-		cum_theta = 0
+		last_theta = 0.0
+		cum_theta = 0.0
 		# Listener loop
 		i = 0
 		while not rospy.is_shutdown() and i < len(self.path):
@@ -54,19 +54,19 @@ class control:
 				self.pub.publish(Twist())
 				print('Point:', path[i])
 				i = i + 1
-				last_rho = 0
-				cum_rho = 0
+				last_rho = 0.0
+				cum_rho = 0.0
 				
-				last_theta = 0
-				cum_theta = 0
-				rospy.sleep(5)
+				last_theta = 0.0
+				cum_theta = 0.0
+				rospy.sleep(5.0)
 				continue
 
 			kobuki_vel = Twist()
-			kp, ki, kd = np.array([0.5, 0, 0])
+			kp, ki, kd = np.array([0.5, 0.0, 0.0])
 			v, cum_rho, last_rho = self.PID(desired_rho, current_rho, 1/f, cum_rho, last_rho, kp, ki, kd)
 						
-			kp, ki, kd = np.array([5.5, 0.2, 0])
+			kp, ki, kd = np.array([5.0, 0.2, 1.0])
 			w, cum_theta, last_theta = self.PID(desired_theta, current_theta, 1/f, cum_theta, last_theta, kp, ki, kd)
 
 			kobuki_vel.linear.x = v
@@ -87,18 +87,18 @@ class control:
 
 if __name__ == '__main__':
 	rospy.init_node('control', anonymous=True)
-	path = [[0, 0],
-	        [-3.5, 0],
+	path = [[0.0, 0.0],
+	        [-3.5, 0.0],
 			[-3.5, 3.5],
 			[1.5, 3.5],
 			[1.5, -1.5],
 			[3.5, -1.5],
-			[3.5, -8],
-			[-2.5, -8],
+			[3.5, -8.0],
+			[-2.5, -8.0],
 			[-2.5, -5.5],
 			[1.5, -5.5],
 			[1.5, -3.5],
-			[-1, -5.5]]
+			[-1.0, -5.5]]
 
 	rospy.loginfo("Node init")
 
