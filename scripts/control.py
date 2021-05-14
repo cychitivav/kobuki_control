@@ -8,7 +8,7 @@ from tf_conversions import transformations as tf
 from geometry_msgs.msg import TransformStamped
 
 class control:
-	def __init__(self, path=[[-5.0, -5.0]], tolerance=0.01):
+	def __init__(self, path=[[1.0, 1.0]], tolerance=0.01):
 		# Variable initialization
 		self.path = np.array(path)
 		#self.x_G, self.y_G = [np.array(self.path[:,0]), np.array(self.path[:,1])]
@@ -50,7 +50,7 @@ class control:
 			print(desired_rho)
 			print(path[i], desired_theta)
 
-			if (abs(current_rho - desired_rho) <= tolerance) and (abs(current_theta - desired_theta) <= tolerance):
+			if (abs(current_rho - desired_rho) <= 0.001) and (abs(current_theta - desired_theta) <= 0.001):
 				self.pub.publish(Twist())
 				print('Point:', path[i])
 				i = i + 1
@@ -66,8 +66,8 @@ class control:
 			kp, ki, kd = np.array([0.5, 0.0, 0.0])
 			v, cum_rho, last_rho = self.PID(desired_rho, current_rho, 1/f, cum_rho, last_rho, kp, ki, kd)
 						
-			kp, ki, kd = np.array([5.0, 0.2, 1.0])
-			w, cum_theta, last_theta = self.PID(desired_theta, current_theta, 1/f, cum_theta, last_theta, kp, ki, kd)
+			kp, ki, kd = np.array([4.0, 0.0, 0.0])
+			w, cum_theta, last_theta = self.PIDt(desired_theta, current_theta, 1/f, cum_theta, last_theta, kp, ki, kd)
 
 			kobuki_vel.linear.x = v
 			kobuki_vel.angular.z = w
@@ -83,6 +83,18 @@ class control:
 
 		previous_error = error		
 		return(kp*error + ki*cum_error + kd*rate_error, cum_error, error)
+
+	def PIDt(self, desired_value, current_value, dt, cum_error, previous_error, kp, ki, kd):
+			error = desired_value - current_value
+			if error > np.pi:
+				error -= 2*np.pi
+			if error < -np.pi:
+				error += 2*np.pi
+			cum_error = cum_error + (error * dt)
+			rate_error = (error - previous_error) / dt
+
+			previous_error = error
+			return(kp*error + ki*cum_error + kd*rate_error, cum_error, error)
 
 
 if __name__ == '__main__':

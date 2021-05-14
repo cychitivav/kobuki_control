@@ -2,8 +2,8 @@
 <launch>
     <!-- ************************************************************************ -->
     <!-- Define world -->
-    <!-- <arg name="world_name" default="$(find kobuki_control)worlds/taller2.world" /> -->
-    <arg name="world_name" default="(find gazebo_ros)/launch/empty_world.launch" />
+    <arg name="world_name" default="$(find kobuki_control)worlds/taller2.world" />
+    <!-- <arg name="world_name" default="(find gazebo_ros)/launch/empty_world.launch" /> -->
 
     <!-- ************************************************************************ -->
     <!-- Launch Gazebo-->
@@ -44,5 +44,5 @@
 
     <!-- ************************************************************************ -->
     <!-- Node python scripts -->
-    <node name="control" pkg="kobuki_control" output="screen" type="control.py" />
+    <node name="control" pkg="kobuki_control" output="screen" type="controlo.py" />
 </launch>
