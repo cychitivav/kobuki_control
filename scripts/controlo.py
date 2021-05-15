@@ -51,22 +51,27 @@ class control:
 
 			kobuki_vel = Twist()
 
-			if abs(current_theta - desired_theta) <= 0.1:
+			error = desired_theta - current_theta 
+			if error >= np.pi:
+				error -= 2.0*np.pi
+			if error < -np.pi:
+				error += 2.0*np.pi
+
+			if abs(error) <= 0.1:
 				if distance>0.3:
 					kobuki_vel.linear.x = 0.3
 				else:
 					kobuki_vel.linear.x = distance
 
-				if distance <= 0.1:
+				if distance <= 0.01:
 					self.pub.publish(Twist())
 					print('Point:', path[i])
 					i = i + 1
 					# rospy.sleep(5.0)
 					continue
 			else:
-				kp, ki, kd = [5.0, 0.0, 0.0]
-				omega, cum_theta, last_theta = self.PIDt(
-				    desired_theta, current_theta, 1/f, cum_theta, last_theta, kp, ki, kd)
+				kp, ki, kd = [5.0, 0.0, 0.0] #0.8 0.0 0.9
+				omega, cum_theta, last_theta = self.PIDt(desired_theta, current_theta, 1/f, cum_theta, last_theta, kp, ki, kd)
 				if abs(omega)>np.pi/3.0:
 					kobuki_vel.angular.z=np.pi/3.0*omega/abs(omega)
 				else:
@@ -74,7 +79,7 @@ class control:
 
 			self.pub.publish(kobuki_vel)
 			print(self.path[i])
-			print(desired_theta, current_theta, distance)
+			print(desired_theta, current_theta,distance)
 			print(kobuki_vel)
 			print()
 			rate.sleep()
@@ -104,7 +109,7 @@ if __name__ == '__main__':
 			[-2.5, -5.5],
 			[1.5, -5.5],
 			[1.5, -3.5],
-			[-1.0, -5.5]]
+			[-1.0, -3.5]]
 
 	rospy.loginfo("Node init")
 
