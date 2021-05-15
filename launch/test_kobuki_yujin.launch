@@ -44,5 +44,5 @@
 
     <!-- ************************************************************************ -->
     <!-- Node python scripts -->
-    <node name="control" pkg="kobuki_control" output="screen" type="controlo.py" />
+    <node name="control" pkg="kobuki_control" output="screen" type="control.py" />
 </launch>
