@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from math import sin
 import rospy
 import numpy as np
 from tf.transformations import rotation_matrix
@@ -46,15 +47,29 @@ class control:
                                                       trans.transform.rotation.z,
                                                       trans.transform.rotation.w])[2]
 
-            x_distance = self.path[i, 0] - trans.transform.translation.x
-            y_distance = self.path[i, 1] - trans.transform.translation.y
+            yaw=-np.pi/2.0
 
-            desired_theta = np.arctan2(y_distance, x_distance)
+            mth=np.array([[np.cos(yaw),-np.sin(yaw),0.0,-4.0],
+                        [np.sin(yaw),np.cos(yaw),0.0,2.0],
+                        [0.0,0.0,1.0,0.0],
+                        [0.0,0.0,0.0,1.0]])
+
+            objetivo=np.array([[self.path[i, 0]],
+            [self.path[i, 1]],
+            [0.0],
+            [1.0]])
+
+            [x,y,nvp,nvp2]=np.dot(mth,objetivo)
+
+            x_distance = x - trans.transform.translation.x 
+            y_distance = y - trans.transform.translation.y 
+
+            desired_theta = np.arctan2(y_distance, x_distance) 
             distance = np.sqrt(x_distance**2 + y_distance**2)
 
             kobuki_vel = Twist()
 
-            error = desired_theta - current_theta
+            error = desired_theta - current_theta 
             if error >= np.pi:
                 error -= 2.0*np.pi
             if error < -np.pi:

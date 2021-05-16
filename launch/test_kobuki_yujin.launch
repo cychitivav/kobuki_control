@@ -18,10 +18,10 @@
     <!-- Spawn Robot-->
 
     <!-- Robot initial pose -->
-    <arg name="x" default="0.0" />
-    <arg name="y" default="0.0" />
+    <arg name="x" default="2.0" />
+    <arg name="y" default="4.0" />
     <!-- <arg name="yaw" default="$(eval -pi/2)" /> -->
-    <arg name="yaw" default="0.0" />
+    <arg name="yaw" default="$(eval pi/2)" />
     
 
     <arg name="robot_name" value="kobuki" />
@@ -44,5 +44,5 @@
 
     <!-- ************************************************************************ -->
     <!-- Node python scripts -->
-    <node name="control" pkg="kobuki_control" output="screen" type="control7.py" />
+    <node name="control" pkg="kobuki_control" output="screen" type="control.py" />
 </launch>
