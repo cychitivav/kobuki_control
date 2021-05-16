@@ -27,6 +27,6 @@
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_control)/rviz/rviz.rviz"/> 
 
     <!-- Node python scripts -->
-    <node name="control" pkg="kobuki_control" output="screen" type="control.py"/>
+    <node name="control" pkg="kobuki_control" output="screen" type="control7.py"/>
     <node name="sensor" pkg="kobuki_control" output="screen" type="odometer.py"/>
 </launch>
