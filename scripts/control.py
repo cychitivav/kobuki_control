@@ -52,7 +52,7 @@ class control:
             mth=np.array([[np.cos(yaw),-np.sin(yaw),0.0,-4.0],
                         [np.sin(yaw),np.cos(yaw),0.0,2.0],
                         [0.0,0.0,1.0,0.0],
-                        [0.0,0.0,0.0,1.0]])
+                        [0.0,0.0,0.0,1.0]]) 
 
             objetivo=np.array([[self.path[i, 0]],
             [self.path[i, 1]],
@@ -125,7 +125,23 @@ if __name__ == '__main__':
             [-2.5, -5.5],
             [1.5, -5.5],
             [1.5, -3.5],
-            [-1.0, -3.5]]
+            [-1.0, -3.5],
+            #inicio de primera trayectoria extra
+            [0.0, 0.0],
+            [1.0, 1.0],
+            [3.0, 1.0],
+            [-1.0, -0.5],
+            [2.0, 3.0],
+            [5.0, -1.0],
+            [0.0, 0.5],
+            #inicio de segunda trayectoria extra
+            [0.0, 0.0],
+            [-2.0, -2.5],
+            [-1.0, -3.5],
+            [0.0, 3.0],
+            [5.0, -1.0],
+            [1.0, -0.5],
+            [2.0, -1.0]]
 
     rospy.loginfo("Node init")
 
