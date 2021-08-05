@@ -2,7 +2,7 @@
 from math import sin
 import rospy
 import numpy as np
-from tf.transformations import rotation_matrix
+from tf.transformations import rotation_matrix, translation_matrix
 from geometry_msgs.msg import Twist
 import tf2_ros
 from tf_conversions import transformations as tf
@@ -47,19 +47,23 @@ class control:
                                                       trans.transform.rotation.z,
                                                       trans.transform.rotation.w])[2]
 
-            yaw=-np.pi/2.0
+            yaw_inicial = rospy.get_param("yaw")
+            x_inicial = rospy.get_param("x")
+            y_inicial = rospy.get_param("y")
 
-            mth=np.array([[np.cos(yaw),-np.sin(yaw),0.0,-4.0],
-                        [np.sin(yaw),np.cos(yaw),0.0,2.0],
-                        [0.0,0.0,1.0,0.0],
-                        [0.0,0.0,0.0,1.0]]) 
+            mth=np.matmul(tf.euler_matrix(0.0,0.0,-yaw_inicial,'sxyz'),tf.translation_matrix((x_inicial,y_inicial,0.0)))
+            
+            # mth=np.array([[np.cos(-yaw_inicial), -np.sin(-yaw_inicial),   0.0,    x_inicial*np.cos(yaw_inicial)-y_inicial*np.sin(yaw_inicial)],
+            #             [np.sin(-yaw_inicial),   np.cos(-yaw_inicial),    0.0,    x_inicial*np.sin(yaw_inicial)+y_inicial*np.cos(yaw_inicial)],
+            #             [0.0,                0.0,       1.0,    0.0],
+            #             [0.0,                0.0,       0.0,    1.0]]) 
 
-            objetivo=np.array([[self.path[i, 0]],
-            [self.path[i, 1]],
-            [0.0],
-            [1.0]])
+            target = np.array([self.path[i, 0], #x
+                               self.path[i, 1], #y
+                               0.0,
+                               1.0])
 
-            [x,y,nvp,nvp2]=np.dot(mth,objetivo)
+            x,y,_,_ = np.dot(mth,target)
 
             x_distance = x - trans.transform.translation.x 
             y_distance = y - trans.transform.translation.y 
@@ -83,32 +87,27 @@ class control:
 
                 if distance <= 0.01:
                     self.pub.publish(Twist())
-                    print('Point:', path[i])
+                    print 'Point:', path[i]
+                    print 'Point in odom:',"[",x[0],",",y[0],']' 
                     i = i + 1
-                    # rospy.sleep(5.0)
                     continue
             else:
-                # if distance > 0.3:
-                #     kobuki_vel.linear.x = 0.3
-                # else:
-                #     kobuki_vel.linear.x = distance
-                    
-                kp, ki, kd = [5.0, 0.0, 0.0]  # 0.8 0.0 0.9
+                K = rospy.get_param('K')
                 cum_error += (error / f)
                 rate_error = (error - last_error) * f
                 last_error = error
 
-                omega = kp*error + ki*cum_error + kd*rate_error
+                omega = K['p']*error + K['i']*cum_error + K['d']*rate_error
                 if abs(omega) > np.pi/3.0:
                     kobuki_vel.angular.z = np.pi/3.0*omega/abs(omega)
                 else:
                     kobuki_vel.angular.z = omega
 
             self.pub.publish(kobuki_vel)
-            print(self.path[i])
-            print(desired_theta, current_theta, distance)
-            print(kobuki_vel)
-            print()
+            # print(self.path[i])
+            # print(desired_theta, current_theta, distance)
+            # print(kobuki_vel)
+            # print()
             rate.sleep()
 
 
@@ -125,17 +124,19 @@ if __name__ == '__main__':
             [-2.5, -5.5],
             [1.5, -5.5],
             [1.5, -3.5],
-            [-1.0, -3.5],
+            [-1.0, -3.5]]
             #inicio de primera trayectoria extra
-            [0.0, 0.0],
+
+    path2 =[[0.0, 0.0],
             [1.0, 1.0],
             [3.0, 1.0],
             [-1.0, -0.5],
             [2.0, 3.0],
             [5.0, -1.0],
-            [0.0, 0.5],
+            [0.0, 0.5]]
             #inicio de segunda trayectoria extra
-            [0.0, 0.0],
+
+    path3 =[[0.0, 0.0],
             [-2.0, -2.5],
             [-1.0, -3.5],
             [0.0, 3.0],
