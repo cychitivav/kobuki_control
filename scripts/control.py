@@ -74,9 +74,9 @@ class control:
             kobuki_vel = Twist()
 
             error = desired_theta - current_theta 
-            if error >= np.pi:
+            while error >= np.pi:
                 error -= 2.0*np.pi
-            if error < -np.pi:
+            while error < -np.pi:
                 error += 2.0*np.pi
 
             if abs(error) <= 0.1:

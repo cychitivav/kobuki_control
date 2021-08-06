@@ -95,7 +95,6 @@ class control:
 
             print self.path[i] 
             print [trans.transform.translation.x, trans.transform.translation.y]
-            print x_error, y_error, angular_error
             print kobuki_vel 
             print
             self.pub.publish(kobuki_vel)
