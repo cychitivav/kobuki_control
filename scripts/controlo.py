@@ -26,7 +26,7 @@ class control:
         last_lin_error, accu_lin_error = [0, 0]
         last_ang_error, accu_ang_error = [0, 0]
 
-        input("Press Enter to continue...")
+        rospy.sleep(10.0)
         while not rospy.is_shutdown() and i < len(self.path):
             # Listener block
             try:
