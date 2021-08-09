@@ -22,12 +22,12 @@
     <arg name="y" default="0.0" />
     <arg name="yaw" default="$(eval -pi/2)" />
 
-    <param name="x" value="$(arg x)" />
-    <param name="y" value="$(arg y)" />
-    <param name="yaw" value="$(arg yaw)" />
+    <param name="x" value="$(arg x)"/>
+    <param name="y" value="$(arg y)"/>
+    <param name="yaw" value="$(arg yaw)"/>
 
 
-    <arg name="robot_name" value="kobuki" />
+    <arg name="robot_name" value="kobuki"/>
 
     <param name="robot_description" command="$(find xacro)/xacro '$(find kobuki_description)/urdf/kobuki_standalone.urdf.xacro'" />
 
@@ -35,7 +35,7 @@
             -x $(arg x) -y $(arg y) -Y $(arg yaw)
             -urdf -param robot_description 
             -model $(arg robot_name)" respawn="false"></node>
-
+    
     <!-- ************************************************************************ -->
     <!-- State Publisher -->
     <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen" />
@@ -46,10 +46,9 @@
 
     <!-- ************************************************************************ -->
     <!-- Node python scripts -->
-    <node name="control" pkg="kobuki_control" output="screen" type="controlo.py" />
+    <node name="control" pkg="kobuki_control" output="screen" type="controlo.py"/>
 
-    <node name="PID" pkg="kobuki_control" output="screen" type="param_server.py" />
-
-    <node name="rqtd" pkg="rqt_reconfigure" output="screen" type="rqt_reconfigure" />
+    <!-- <node name="PID" pkg="kobuki_control" output="screen" type="param_server.py"/>
+    <node name="rqtd" pkg="rqt_reconfigure" output="screen" type="rqt_reconfigure" /> -->
 
 </launch>

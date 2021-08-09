@@ -9,8 +9,8 @@ from tf_conversions import transformations as tf
 class control:
     def __init__(self, path=[[5.0, -4.0]]):
         self.path = np.array(path)
-        self.v_cruising = 1#0.3  # 30 cm/s
-        self.w_cruising = np.pi#/3  # 60 deg/s
+        self.v_cruising = 0.3  # 30 cm/s
+        self.w_cruising = np.pi/3  # 60 deg/s
 
         # Listener odometry
         tfBuffer = tf2_ros.Buffer()
@@ -61,25 +61,25 @@ class control:
 
             kobuki_vel = Twist()
 
-            if abs(linear_error) + abs(angular_error) <= 0.001:
+            if abs(linear_error) + abs(angular_error) <= 0.1:
                 self.pub.publish(Twist())
-                print('Point:', path[i])
+                rospy.loginfo('Point achieved: '+str(path[i]))
                 i = i + 1
                 continue
             else:
                 # Linear
-                kp = rospy.get_param("/PID/Kpv")
-                ki = rospy.get_param("/PID/Kiv")
-                kd = rospy.get_param("/PID/Kdv")
+                kp = 0.4 # rospy.get_param("/PID/Kpv")
+                ki = 0.4 # rospy.get_param("/PID/Kiv")
+                kd = 10.0 # rospy.get_param("/PID/Kdv")
                 accu_lin_error += linear_error
                 rate_error = linear_error - last_lin_error
                 last_lin_error = linear_error
                 v = kp*linear_error + ki*accu_lin_error + kd*rate_error
 
                 # Angular
-                kp = rospy.get_param("/PID/Kpw")
-                ki = rospy.get_param("/PID/Kiw")
-                kd = rospy.get_param("/PID/Kdw")
+                kp = 3.7 # rospy.get_param("/PID/Kpw")
+                ki = 0.0 # rospy.get_param("/PID/Kiw")
+                kd = 0.0 # rospy.get_param("/PID/Kdw")
                 accu_ang_error += angular_error
                 rate_error = angular_error - last_ang_error
                 last_ang_error = angular_error
@@ -93,10 +93,10 @@ class control:
                 if abs(kobuki_vel.angular.z) > self.w_cruising:
                     kobuki_vel.angular.z = self.w_cruising * np.sign(kobuki_vel.angular.z)
 
-            print self.path[i] 
-            print [trans.transform.translation.x, trans.transform.translation.y]
-            print kobuki_vel 
-            print
+            # print self.path[i] 
+            # print [trans.transform.translation.x, trans.transform.translation.y]
+            # print kobuki_vel 
+            # print
             self.pub.publish(kobuki_vel)
 
     def normalizeAngle(self, angle):
@@ -120,7 +120,7 @@ if __name__ == '__main__':
             [1.5, -3.5],
             [-1.0, -3.5]]
 
-    rospy.loginfo("Node init")
+    rospy.loginfo("Node control init")
 
     control(path=path)
 
