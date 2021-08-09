@@ -5,13 +5,12 @@ from geometry_msgs.msg import Twist
 from nav_msgs.msg import Path
 import tf2_ros
 from tf_conversions import transformations as tf
-import sys
 
 
 class control:
     def __init__(self):        
-        self.v_cruising = 0.3  # 30 cm/s
-        self.w_cruising = np.pi/3  # 60 deg/s
+        self.v_cruising = 1.0 #0.3  # 30 cm/s
+        self.w_cruising = np.pi #/3  # 60 deg/s
 
         # Listener odometry
         self.tfBuffer = tf2_ros.Buffer()
@@ -20,12 +19,14 @@ class control:
         # Velocity publisher
         self.pub = rospy.Publisher(
             '/mobile_base/commands/velocity', Twist, queue_size=10)
-        self.sub = rospy.Subscriber("/nav_msgs/Path", Path, self.follow)
+        self.sub = rospy.Subscriber("/path", Path, self.follow)
 
-    def follow(self, path):
-        path = np.array()
-        for pose in path.poses:
-            path.append([pose.pose.point.x, pose.pose.point.y])
+    def follow(self, route):
+        path = []
+        for pose in route.poses:
+            path.append([pose.pose.position.x, pose.pose.position.y])
+        print path
+        path=np.array(path)
         # Listener loop
         i = 0
         # Errors
@@ -111,7 +112,7 @@ class control:
     def normalizeAngle(self, angle):
         while angle < -np.pi:
             angle += 2.0*np.pi
-        while angle > np.pi:
+        while angle >= np.pi:
             angle -= 2.0*np.pi
         return angle
 
