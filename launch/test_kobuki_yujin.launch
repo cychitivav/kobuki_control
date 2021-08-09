@@ -42,11 +42,13 @@
 
     <!-- ************************************************************************ -->
     <!-- RViz -->
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_description)/rviz/model.rviz" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kobuki_control)/rviz/model.rviz" />
 
     <!-- ************************************************************************ -->
     <!-- Node python scripts -->
     <node name="control" pkg="kobuki_control" output="screen" type="controlo.py"/>
+
+    <node name="gen_path" pkg="kobuki_control" output="screen" type="gen_path.py"/>
 
     <!-- <node name="PID" pkg="kobuki_control" output="screen" type="param_server.py"/>
     <node name="rqtd" pkg="rqt_reconfigure" output="screen" type="rqt_reconfigure" /> -->
