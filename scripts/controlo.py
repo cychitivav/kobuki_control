@@ -65,9 +65,9 @@ class control:
             else:
                 param_names = rospy.get_param_names()
                 # Linear
-                kpv = rospy.get_param("/PID/Kpv") if "/PID/Kpv" in param_names else 0.004
-                kiv = rospy.get_param("/PID/Kiv") if "/PID/Kiv" in param_names else 0.004
-                kdv = rospy.get_param("/PID/Kdv") if "/PID/Kdv" in param_names else 0.010
+                kpv = rospy.get_param("/PID/Kpv") if "/PID/Kpv" in param_names else 0.0004
+                kiv = rospy.get_param("/PID/Kiv") if "/PID/Kiv" in param_names else 0.0004
+                kdv = rospy.get_param("/PID/Kdv") if "/PID/Kdv" in param_names else 0.0010
                 accu_lin_error += linear_error
                 rate_error = linear_error - last_lin_error
                 last_lin_error = linear_error

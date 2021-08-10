@@ -9,8 +9,6 @@ from tf_conversions import transformations as tf
 
 class generator:
     def __init__(self, path=[[-5.0, -4.0]]):
-        route = np.array(path)
-
         self.yaw_0 = rospy.get_param("yaw")
         self.x_0 = rospy.get_param("x")
         self.y_0 = rospy.get_param("y")
@@ -25,11 +23,11 @@ class generator:
         msg.header.frame_id = "odom"
         msg.header.stamp = rospy.Time.now()
 
-        for wp in route:
+        for wp in path:
             pose = PoseStamped()
 
-            pose.pose.position.x = wp[0]*np.cos(self.yaw_0) + wp[1]*np.sin(self.yaw_0)
-            pose.pose.position.y = - wp[0]*np.sin(self.yaw_0) + wp[1]*np.cos(self.yaw_0)
+            pose.pose.position.x = (wp[0]-self.x_0)*np.cos(-self.yaw_0) - (wp[1]-self.y_0)*np.sin(-self.yaw_0)
+            pose.pose.position.y = (wp[0]-self.x_0)*np.sin(-self.yaw_0) + (wp[1]-self.y_0)*np.cos(-self.yaw_0)
 
             msg.poses.append(pose)
 
@@ -51,7 +49,7 @@ class generator:
         trans.transform.rotation.z = quat[2]
         trans.transform.rotation.w = quat[3]
 
-        broadcaster=tf2_ros.StaticTransformBroadcaster()
+        broadcaster = tf2_ros.StaticTransformBroadcaster()
         broadcaster.sendTransform(trans)
 
 if __name__ == '__main__':
