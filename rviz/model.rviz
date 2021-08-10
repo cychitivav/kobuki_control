@@ -136,13 +136,13 @@ Visualization Manager:
           Value: false
         gyro_link:
           Value: false
+        map:
+          Value: true
         odom:
           Value: true
         wheel_left_link:
           Value: true
         wheel_right_link:
-          Value: true
-        world:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -150,7 +150,7 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        world:
+        map:
           odom:
             base_footprint:
               base_link:
@@ -195,6 +195,13 @@ Visualization Manager:
       Topic: /path
       Unreliable: false
       Value: true
+    - Class: rviz/Axes
+      Enabled: false
+      Length: 1
+      Name: Axes
+      Radius: 0.10000000149011612
+      Reference Frame: <Fixed Frame>
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -223,25 +230,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 12.350248336791992
+      Distance: 10.500421524047852
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.8476071953773499
-        Y: 0.4228008985519409
-        Z: -2.030517816543579
+        X: -0.3472263216972351
+        Y: 1.586254596710205
+        Z: -0.9539161324501038
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.0997965335845947
+      Pitch: 0.9847967624664307
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.8754005432128906
+      Yaw: 5.095408916473389
     Saved: ~
 Window Geometry:
   Displays:

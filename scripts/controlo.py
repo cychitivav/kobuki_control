@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import rospy
 import numpy as np
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, TransformStamped
 from nav_msgs.msg import Path
 import tf2_ros
 from tf_conversions import transformations as tf
@@ -25,20 +25,19 @@ class control:
         waypoints = []
         for pose in path.poses:
             waypoints.append([pose.pose.position.x, pose.pose.position.y])
-
-        #waypoints = np.array(path)
+            
         # Listener loop
         i = 0
         # Errors
         last_lin_error, accu_lin_error = [0, 0]
         last_ang_error, accu_ang_error = [0, 0]
 
-        rospy.sleep(3.0)
+        # rospy.sleep(3.0)
         while not rospy.is_shutdown() and i < len(waypoints):
             # Listener block
             try:
                 trans = self.tfBuffer.lookup_transform(
-                    'map', 'base_footprint', rospy.Time())
+                    'odom', 'base_footprint', rospy.Time())
             except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
                 continue
 
