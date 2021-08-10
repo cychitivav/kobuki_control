@@ -19,7 +19,7 @@ class generator:
 
         while not rospy.is_shutdown():
             msg = Path()
-            msg.header.frame_id = "world"
+            msg.header.frame_id = "map"
             msg.header.stamp = rospy.Time.now()
 
             for wp in route:
@@ -34,32 +34,31 @@ class generator:
 
 
     def pub_trans(self):
-        broadcaster=tf2_ros.StaticTransformBroadcaster()
         trans=TransformStamped()
         trans.header.stamp=rospy.Time.now()
-        trans.header.frame_id= "world"
+        trans.header.frame_id= "map"
         trans.child_frame_id="odom"
 
         yaw_0 = rospy.get_param("yaw")
         x_0 = rospy.get_param("x")
         y_0 = rospy.get_param("y")
 
-        trans.transform.translation.x=x_0
-        trans.transform.translation.y=y_0
+        trans.transform.translation.x = x_0
+        trans.transform.translation.y = y_0
 
-        quat=tf.quaternion_from_euler(0.0,0.0,-yaw_0)
-        trans.transform.rotation.x=quat[0]
-        trans.transform.rotation.y=quat[1]
-        trans.transform.rotation.z=quat[2]
-        trans.transform.rotation.w=quat[3]
+        quat=tf.quaternion_from_euler(0.0,0.0,yaw_0)
+        trans.transform.rotation.x = quat[0]
+        trans.transform.rotation.y = quat[1]
+        trans.transform.rotation.z = quat[2]
+        trans.transform.rotation.w = quat[3]
 
+        broadcaster=tf2_ros.StaticTransformBroadcaster()
         broadcaster.sendTransform(trans)
 
 if __name__ == '__main__':
     rospy.init_node('path_gen', anonymous=True)
 
-    path = [[0.0, 0.0],
-            [-3.5, 0.0],
+    path = [[-3.5, 0.0],
             [-3.5, 3.5],
             [1.5, 3.5],
             [1.5, -1.5],
@@ -72,8 +71,7 @@ if __name__ == '__main__':
             [-1.0, -3.5]]
             #inicio de primera trayectoria extra
 
-    path2 =[[0.0, 0.0],
-            [1.0, 1.0],
+    path2 =[[1.0, 1.0],
             [3.0, 1.0],
             [-1.0, -0.5],
             [2.0, 3.0],
@@ -81,8 +79,7 @@ if __name__ == '__main__':
             [0.0, 0.5]]
             #inicio de segunda trayectoria extra
 
-    path3 =[[0.0, 0.0],
-            [-2.0, -2.5],
+    path3 =[[-2.0, -2.5],
             [-1.0, -3.5],
             [0.0, 3.0],
             [5.0, -1.0],
