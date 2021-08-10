@@ -19,20 +19,21 @@ class generator:
 
         pub = rospy.Publisher('/path', Path, queue_size=10)
 
-        while not rospy.is_shutdown():
-            msg = Path()
-            msg.header.frame_id = "odom"
-            msg.header.stamp = rospy.Time.now()
+        rospy.sleep(10.0)
+        
+        msg = Path()
+        msg.header.frame_id = "odom"
+        msg.header.stamp = rospy.Time.now()
 
-            for wp in route:
-                pose = PoseStamped()
+        for wp in route:
+            pose = PoseStamped()
 
-                pose.pose.position.x = wp[0]*np.cos(self.yaw_0) + wp[1]*np.sin(self.yaw_0)
-                pose.pose.position.y = - wp[0]*np.sin(self.yaw_0) + wp[1]*np.cos(self.yaw_0)
+            pose.pose.position.x = wp[0]*np.cos(self.yaw_0) + wp[1]*np.sin(self.yaw_0)
+            pose.pose.position.y = - wp[0]*np.sin(self.yaw_0) + wp[1]*np.cos(self.yaw_0)
 
-                msg.poses.append(pose)
+            msg.poses.append(pose)
 
-            pub.publish(msg)
+        pub.publish(msg)
 
     
     def set_initial_pose(self):
