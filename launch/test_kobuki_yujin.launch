@@ -2,8 +2,8 @@
 <launch>
     <!-- ************************************************************************ -->
     <!-- Define world -->
-    <arg name="world_name" default="$(find kobuki_control)worlds/taller2.world" />
-    <!-- <arg name="world_name" default="(find gazebo_ros)/launch/empty_world.launch" /> -->
+    <!-- <arg name="world_name" default="$(find kobuki_control)worlds/maze.world" /> -->
+    <arg name="world_name" default="(find gazebo_ros)/launch/empty_world.launch" />
 
     <!-- ************************************************************************ -->
     <!-- Launch Gazebo-->
@@ -20,11 +20,7 @@
     <!-- Robot initial pose -->
     <arg name="x" default="-0.15" />
     <arg name="y" default="0.0" />
-    <arg name="yaw" default="$(eval -pi/2)" />
-
-    <param name="x" value="$(arg x)"/>
-    <param name="y" value="$(arg y)"/>
-    <param name="yaw" value="$(arg yaw)"/>
+    <arg name="yaw" default="$(eval -pi/2.0)" />
 
     <arg name="robot_name" value="kobuki"/>
 
@@ -33,7 +29,11 @@
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_$(arg robot_name)" args="
             -x $(arg x) -y $(arg y) -Y $(arg yaw)
             -urdf -param robot_description 
-            -model $(arg robot_name)" respawn="false"></node>
+            -model $(arg robot_name)" respawn="false"/>
+
+    <!-- ************************************************************************ -->
+    <!-- Odom transform-->
+    <node pkg="tf" type="static_transform_publisher" name="map_tf" args="$(arg x) $(arg y) 0 $(arg yaw) 0 0 /map /odom 100"/>
     
     <!-- ************************************************************************ -->
     <!-- State Publisher -->

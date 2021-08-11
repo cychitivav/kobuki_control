@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   gazebo_ros
   rospy
   dynamic_reconfigure
+  kobuki_description
 )
 
 ## System dependencies are found with CMake's conventions
