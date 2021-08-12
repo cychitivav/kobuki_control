@@ -31,7 +31,7 @@ class generator:
 if __name__ == '__main__':
     rospy.init_node('path_gen', anonymous=True)
 
-    path = [[0.0, 0.0],
+    path = [#[0.0, 0.0],
             [-3.5, 0.0],
             [-3.5, 3.5],
             [1.5, 3.5],

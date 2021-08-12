@@ -66,8 +66,8 @@ class control:
             else:
                 param_names = rospy.get_param_names()
                 # Linear
-                kpv = rospy.get_param("/PID/Kpv") if "/PID/Kpv" in param_names else 0.600
-                kiv = rospy.get_param("/PID/Kiv") if "/PID/Kiv" in param_names else 0.004
+                kpv = rospy.get_param("/PID/Kpv") if "/PID/Kpv" in param_names else 6.6 #2.6
+                kiv = rospy.get_param("/PID/Kiv") if "/PID/Kiv" in param_names else 0.1 #0.004
                 kdv = rospy.get_param("/PID/Kdv") if "/PID/Kdv" in param_names else 1.100
                 accu_lin_error += linear_error
                 rate_error = linear_error - last_lin_error
@@ -75,9 +75,9 @@ class control:
                 v = kpv*linear_error + kiv*accu_lin_error + kdv*rate_error
 
                 # Angular
-                kpw = rospy.get_param("/PID/Kpw") if "/PID/Kpw" in param_names else 14.000
+                kpw = rospy.get_param("/PID/Kpw") if "/PID/Kpw" in param_names else 6.0 #14.000
                 kiw = rospy.get_param("/PID/Kiw") if "/PID/Kiw" in param_names else 0.0056
-                kdw = rospy.get_param("/PID/Kdw") if "/PID/Kdw" in param_names else 4.5900
+                kdw = rospy.get_param("/PID/Kdw") if "/PID/Kdw" in param_names else 10.0 #4.5900
                 accu_ang_error += angular_error
                 rate_error = angular_error - last_ang_error
                 last_ang_error = angular_error
